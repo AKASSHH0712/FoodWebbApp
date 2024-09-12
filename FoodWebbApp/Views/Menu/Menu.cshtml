@@ -1,0 +1,1266 @@
+﻿@model Food.DTOs.ProductDTO
+ @inject IHttpContextAccessor Accessor
+
+
+<style>
+    .head {
+        margin-top: 70px;
+    }
+
+    .fashion_section {
+        margin-top: 70px;
+    }
+
+    .fashion_taital {
+        text-align: center;
+        font-size: 36px;
+        color: #333;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    .box_main {
+        text-align: center;
+        padding: 20px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+        margin-bottom: 20px;
+        transition: transform 0.3s;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .box_main:hover {
+            transform: translateY(-10px);
+        }
+
+    .shirt_text {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .price_text {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 15px;
+    }
+
+    .tshirt_img img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .btn_main {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .buy_bt a, .seemore_bt a {
+        background-color: #5cb85c;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+        .buy_bt a:hover, .seemore_bt a:hover {
+            background-color: #4cae4c;
+        }
+
+    .carousel-control-prev, .carousel-control-next {
+        width: 5%;
+    }
+
+        .carousel-control-prev i, .carousel-control-next i {
+            font-size: 30px;
+            color: #333;
+        }
+
+</style>
+
+<div class="fashion_section">
+    <!-- Fashion Carousel -->
+    <div id="main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.FastFood != null && Model.FastFood.Any())
+            {
+                var itemsPerSlide = 3;
+                var totalSlides = (int)Math.Ceiling((double)Model.FastFood.Count() / itemsPerSlide);
+
+                for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                {
+                    var productsForSlide = Model.FastFood.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                        <div class="container">
+                            <h1 class="fashion_taital">FastFood</h1>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in productsForSlide)
+                                    {
+                                        <div class="col-lg-4 col-sm-4 mb-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.NAME</h4>
+                                                <p class="price_text">Start Price <span style="color: #262626;">$ @product.PRICE</span></p>
+                                                <div class="tshirt_img">
+                                                    <img src="@Url.Content(product.IMAGEURL)" alt="@product.NAME">
+                                                </div>
+                                                <form action="@Url.Action("AddToCart", "Addtocart")" method="post">
+                                                    <input type="hidden" name="PRODUCTID" value="@product.PRODUCTID" />
+                                                    <input type="hidden" name="CATEGORYID" value="@product.CATEGORYID" />
+                                                    <input type="hidden" name="PRICE" value="@product.PRICE"></input>
+                                                    <input type="hidden" name="USERID" value="@Accessor.HttpContext.Session.GetInt32("UserID")" />
+                                                    <div class="quantity-controls">
+                                                        <input type="number" name="Quantity" value="1" min="1" class="quantity-input" />
+                                                    </div>
+                                                    <button type="submit" class="buy_bt">Add to Cart</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (productsForSlide.Count() < itemsPerSlide)
+                                    {
+                                        var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                        for (int i = 0; i < emptyColumns; i++)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">FastFood</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>
+<div class="fashion_section">
+    <!-- Fashion Carousel -->
+    <div id="main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.SouthIndian != null && Model.SouthIndian.Any())
+            {
+                var itemsPerSlide = 3;
+                var totalSlides = (int)Math.Ceiling((double)Model.SouthIndian.Count() / itemsPerSlide);
+
+                for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                {
+                    var productsForSlide = Model.SouthIndian.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                        <div class="container">
+                            <h1 class="fashion_taital">SouthIndian</h1>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in productsForSlide)
+                                    {
+                                        <div class="col-lg-4 col-sm-4 mb-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.NAME</h4>
+                                                <p class="price_text">Start Price <span style="color: #262626;">$ @product.PRICE</span></p>
+                                                <div class="tshirt_img">
+                                                    <img src="@Url.Content(product.IMAGEURL)" alt="@product.NAME">
+                                                </div>
+                                                <form action="@Url.Action("AddToCart", "Addtocart")" method="post">
+                                                    <input type="hidden" name="PRODUCTID" value="@product.PRODUCTID" />
+                                                    <input type="hidden" name="CATEGORYID" value="@product.CATEGORYID" />
+                                                    <input type="hidden" name="USERID" value="@Accessor.HttpContext.Session.GetInt32("UserID")" />
+                                                    <div class="quantity-controls">
+                                                        <input type="number" name="Quantity" value="1" min="1" class="quantity-input" />
+                                                    </div>
+                                                    <button type="submit" class="buy_bt">Add to Cart</button>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (productsForSlide.Count() < itemsPerSlide)
+                                    {
+                                        var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                        for (int i = 0; i < emptyColumns; i++)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">SouthIndian</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>
+<div class="fashion_section">
+    <!-- Fashion Carousel -->
+    <div id="main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.Chinese != null && Model.Chinese.Any())
+            {
+                var itemsPerSlide = 3;
+                var totalSlides = (int)Math.Ceiling((double)Model.Chinese.Count() / itemsPerSlide);
+
+                for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                {
+                    var productsForSlide = Model.Chinese.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                        <div class="container">
+                            <h1 class="fashion_taital">Chinese</h1>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in productsForSlide)
+                                    {
+                                        <div class="col-lg-4 col-sm-4 mb-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.NAME</h4>
+                                                <p class="price_text">Start Price <span style="color: #262626;">$ @product.PRICE</span></p>
+                                                <div class="tshirt_img">
+                                                    <img src="@Url.Content(product.IMAGEURL)" alt="@product.NAME">
+                                                </div>
+                                                <form action="@Url.Action("AddToCart", "Addtocart")" method="post">
+                                                    <input type="hidden" name="PRODUCTID" value="@product.PRODUCTID" />
+                                                    <input type="hidden" name="CATEGORYID" value="@product.CATEGORYID" />
+                                                    <input type="hidden" name="USERID" value="@Accessor.HttpContext.Session.GetInt32("UserID")" />
+                                                    <div class="quantity-controls">
+                                                        <input type="number" name="Quantity" value="1" min="1" class="quantity-input" />
+                                                    </div>
+                                                    <button type="submit" class="buy_bt">Add to Cart</button>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (productsForSlide.Count() < itemsPerSlide)
+                                    {
+                                        var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                        for (int i = 0; i < emptyColumns; i++)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">Chinese</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>
+
+<div class="fashion_section">
+    <!-- Fashion Carousel -->
+    <div id="main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.Italian != null && Model.Italian.Any())
+            {
+                var itemsPerSlide = 3;
+                var totalSlides = (int)Math.Ceiling((double)Model.Italian.Count() / itemsPerSlide);
+
+                for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                {
+                    var productsForSlide = Model.Italian.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                        <div class="container">
+                            <h1 class="fashion_taital">Italian</h1>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in productsForSlide)
+                                    {
+                                        <div class="col-lg-4 col-sm-4 mb-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.NAME</h4>
+                                                <p class="price_text">Start Price <span style="color: #262626;">$ @product.PRICE</span></p>
+                                                <div class="tshirt_img">
+                                                    <img src="@Url.Content(product.IMAGEURL)" alt="@product.NAME">
+                                                </div>
+                                                <form action="@Url.Action("AddToCart", "Addtocart")" method="post">
+                                                    <input type="hidden" name="PRODUCTID" value="@product.PRODUCTID" />
+                                                    <input type="hidden" name="CATEGORYID" value="@product.CATEGORYID" />
+                                                    <input type="hidden" name="USERID" value="@Accessor.HttpContext.Session.GetInt32("UserID")" />
+                                                    <div class="quantity-controls">
+                                                        <input type="number" name="Quantity" value="1" min="1" class="quantity-input" />
+                                                    </div>
+                                                    <button type="submit" class="buy_bt">Add to Cart</button>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (productsForSlide.Count() < itemsPerSlide)
+                                    {
+                                        var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                        for (int i = 0; i < emptyColumns; i++)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">Italian</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>
+
+<div class="fashion_section">
+    <!-- Fashion Carousel -->
+    <div id="main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.Mexican != null && Model.Mexican.Any())
+            {
+                var itemsPerSlide = 3;
+                var totalSlides = (int)Math.Ceiling((double)Model.Mexican.Count() / itemsPerSlide);
+
+                for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                {
+                    var productsForSlide = Model.Mexican.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                        <div class="container">
+                            <h1 class="fashion_taital">Mexican</h1>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in productsForSlide)
+                                    {
+                                        <div class="col-lg-4 col-sm-4 mb-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.NAME</h4>
+                                                <p class="price_text">Start Price <span style="color: #262626;">$ @product.PRICE</span></p>
+                                                <div class="tshirt_img">
+                                                    <img src="@Url.Content(product.IMAGEURL)" alt="@product.NAME">
+                                                </div>
+                                                <form action="@Url.Action("AddToCart", "Addtocart")" method="post">
+                                                    <input type="hidden" name="PRODUCTID" value="@product.PRODUCTID" />
+                                                    <input type="hidden" name="CATEGORYID" value="@product.CATEGORYID" />
+                                                    <input type="hidden" name="USERID" value="@Accessor.HttpContext.Session.GetInt32("UserID")" />
+                                                    <div class="quantity-controls">
+                                                        <input type="number" name="Quantity" value="1" min="1" class="quantity-input" />
+                                                    </div>
+                                                    <button type="submit" class="buy_bt">Add to Cart</button>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (productsForSlide.Count() < itemsPerSlide)
+                                    {
+                                        var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                        for (int i = 0; i < emptyColumns; i++)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">Mexican</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>
+
+
+
+<div class="fashion_section">
+    <!-- Fashion Carousel -->
+    <div id="main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.Desserts != null && Model.Desserts.Any())
+            {
+                var itemsPerSlide = 3;
+                var totalSlides = (int)Math.Ceiling((double)Model.Desserts.Count() / itemsPerSlide);
+
+                for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                {
+                    var productsForSlide = Model.Desserts.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                        <div class="container">
+                            <h1 class="fashion_taital">Desserts</h1>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in productsForSlide)
+                                    {
+                                        <div class="col-lg-4 col-sm-4 mb-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.NAME</h4>
+                                                <p class="price_text">Start Price <span style="color: #262626;">$ @product.PRICE</span></p>
+                                                <div class="tshirt_img">
+                                                    <img src="@Url.Content(product.IMAGEURL)" alt="@product.NAME">
+                                                </div>
+                                                <form action="@Url.Action("AddToCart", "Addtocart")" method="post">
+                                                    <input type="hidden" name="PRODUCTID" value="@product.PRODUCTID" />
+                                                    <input type="hidden" name="CATEGORYID" value="@product.CATEGORYID" />
+                                                    <input type="hidden" name="USERID" value="@Accessor.HttpContext.Session.GetInt32("UserID")" />
+                                                    <div class="quantity-controls">
+                                                        <input type="number" name="Quantity" value="1" min="1" class="quantity-input" />
+                                                    </div>
+                                                    <button type="submit" class="buy_bt">Add to Cart</button>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (productsForSlide.Count() < itemsPerSlide)
+                                    {
+                                        var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                        for (int i = 0; i < emptyColumns; i++)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">Desserts</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>
+
+
+<div class="fashion_section">
+    <!-- Fashion Carousel -->
+    <div id="main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.Beverages != null && Model.Beverages.Any())
+            {
+                var itemsPerSlide = 3;
+                var totalSlides = (int)Math.Ceiling((double)Model.Beverages.Count() / itemsPerSlide);
+
+                for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                {
+                    var productsForSlide = Model.Beverages.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                        <div class="container">
+                            <h1 class="fashion_taital">Beverages</h1>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in productsForSlide)
+                                    {
+                                        <div class="col-lg-4 col-sm-4 mb-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.NAME</h4>
+                                                <p class="price_text">Start Price <span style="color: #262626;">$ @product.PRICE</span></p>
+                                                <div class="tshirt_img">
+                                                    <img src="@Url.Content(product.IMAGEURL)" alt="@product.NAME">
+                                                </div>
+                                                <form action="@Url.Action("AddToCart", "Addtocart")" method="post">
+                                                    <input type="hidden" name="PRODUCTID" value="@product.PRODUCTID" />
+                                                    <input type="hidden" name="CATEGORYID" value="@product.CATEGORYID" />
+                                                    <input type="hidden" name="USERID" value="@Accessor.HttpContext.Session.GetInt32("UserID")" />
+                                                    <div class="quantity-controls">
+                                                        <input type="number" name="Quantity" value="1" min="1" class="quantity-input" />
+                                                    </div>
+                                                    <button type="submit" class="buy_bt">Add to Cart</button>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (productsForSlide.Count() < itemsPerSlide)
+                                    {
+                                        var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                        for (int i = 0; i < emptyColumns; i++)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">Beverages</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>
+
+
+<div class="fashion_section">
+    <!-- Fashion Carousel -->
+    <div id="main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.NorthIndian != null && Model.NorthIndian.Any())
+            {
+                var itemsPerSlide = 3;
+                var totalSlides = (int)Math.Ceiling((double)Model.NorthIndian.Count() / itemsPerSlide);
+
+                for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                {
+                    var productsForSlide = Model.NorthIndian.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                        <div class="container">
+                            <h1 class="fashion_taital">NorthIndian</h1>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in productsForSlide)
+                                    {
+                                        <div class="col-lg-4 col-sm-4 mb-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.NAME</h4>
+                                                <p class="price_text">Start Price <span style="color: #262626;">$ @product.PRICE</span></p>
+                                                <div class="tshirt_img">
+                                                    <img src="@Url.Content(product.IMAGEURL)" alt="@product.NAME">
+                                                </div>
+                                                <form action="@Url.Action("AddToCart", "Addtocart")" method="post">
+                                                    <input type="hidden" name="PRODUCTID" value="@product.PRODUCTID" />
+                                                    <input type="hidden" name="CATEGORYID" value="@product.CATEGORYID" />
+                                                    <input type="hidden" name="USERID" value="@Accessor.HttpContext.Session.GetInt32("UserID")" />
+                                                    <div class="quantity-controls">
+                                                        <input type="number" name="Quantity" value="1" min="1" class="quantity-input" />
+                                                    </div>
+                                                    <button type="submit" class="buy_bt">Add to Cart</button>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (productsForSlide.Count() < itemsPerSlide)
+                                    {
+                                        var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                        for (int i = 0; i < emptyColumns; i++)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">NorthIndian</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>
+
+<div class="fashion_section">
+    <!-- Fashion Carousel -->
+    <div id="main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.Continental != null && Model.Continental.Any())
+            {
+                var itemsPerSlide = 3;
+                var totalSlides = (int)Math.Ceiling((double)Model.Continental.Count() / itemsPerSlide);
+
+                for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                {
+                    var productsForSlide = Model.Continental.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                        <div class="container">
+                            <h1 class="fashion_taital">Continental</h1>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in productsForSlide)
+                                    {
+                                        <div class="col-lg-4 col-sm-4 mb-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.NAME</h4>
+                                                <p class="price_text">Start Price <span style="color: #262626;">$ @product.PRICE</span></p>
+                                                <div class="tshirt_img">
+                                                    <img src="@Url.Content(product.IMAGEURL)" alt="@product.NAME">
+                                                </div>
+                                                <form action="@Url.Action("AddToCart", "Addtocart")" method="post">
+                                                    <input type="hidden" name="PRODUCTID" value="@product.PRODUCTID" />
+                                                    <input type="hidden" name="CATEGORYID" value="@product.CATEGORYID" />
+                                                    <input type="hidden" name="USERID" value="@Accessor.HttpContext.Session.GetInt32("UserID")" />
+                                                    <div class="quantity-controls">
+                                                        <input type="number" name="Quantity" value="1" min="1" class="quantity-input" />
+                                                    </div>
+                                                    <button type="submit" class="buy_bt">Add to Cart</button>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (productsForSlide.Count() < itemsPerSlide)
+                                    {
+                                        var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                        for (int i = 0; i < emptyColumns; i++)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">Continental</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>
+
+<div class="fashion_section">
+    <!-- Fashion Carousel -->
+    <div id="main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.Seafood != null && Model.Seafood.Any())
+            {
+                var itemsPerSlide = 3;
+                var totalSlides = (int)Math.Ceiling((double)Model.Seafood.Count() / itemsPerSlide);
+
+                for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                {
+                    var productsForSlide = Model.Seafood.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                        <div class="container">
+                            <h1 class="fashion_taital">Seafood</h1>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in productsForSlide)
+                                    {
+                                        <div class="col-lg-4 col-sm-4 mb-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.NAME</h4>
+                                                <p class="price_text">Start Price <span style="color: #262626;">$ @product.PRICE</span></p>
+                                                <div class="tshirt_img">
+                                                    <img src="@Url.Content(product.IMAGEURL)" alt="@product.NAME">
+                                                </div>
+                                                <form action="@Url.Action("AddToCart", "Addtocart")" method="post">
+                                                    <input type="hidden" name="PRODUCTID" value="@product.PRODUCTID" />
+                                                    <input type="hidden" name="CATEGORYID" value="@product.CATEGORYID" />
+                                                    <input type="hidden" name="USERID" value="@Accessor.HttpContext.Session.GetInt32("UserID")" />
+                                                    <div class="quantity-controls">
+                                                        <input type="number" name="Quantity" value="1" min="1" class="quantity-input" />
+                                                    </div>
+                                                    <button type="submit" class="buy_bt">Add to Cart</button>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (productsForSlide.Count() < itemsPerSlide)
+                                    {
+                                        var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                        for (int i = 0; i < emptyColumns; i++)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">Seafood</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>
+@* 
+<div class="fashion_section">
+    <!-- Fashion Carousel -->
+    <div id="main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.Categories != null && Model.Categories.Any())
+            {
+                foreach (var category in Model.Categories)
+                {
+                    var itemsPerSlide = 3;
+                    var totalSlides = (int)Math.Ceiling((double)category.PRODUCTS.Count() / itemsPerSlide);
+
+                    for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                    {
+                        var productsForSlide = category.PRODUCTS.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                        <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                            <div class="container">
+                                <h1 class="fashion_taital">@category.CATEGORYNAME</h1>
+                                <div class="fashion_section_2">
+                                    <div class="row">
+                                        @foreach (var product in productsForSlide)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4">
+                                                <div class="box_main">
+                                                    <h4 class="shirt_text">@product.NAME</h4>
+                                                    <p class="price_text">Start Price <span style="color: #262626;">$ @product.PRICE</span></p>
+                                                    <div class="tshirt_img">
+                                                        <img src="@Url.Content(product.IMAGEURL)" alt="@product.NAME">
+                                                    </div>
+                                                    <div class="btn_main">
+                                                        <div class="buy_bt"><a href="#">Buy Now</a></div>
+                                                        <div class="seemore_bt"><a href="@Url.Action("ProductDetails", "Product", new { id = product.PRODUCTID })">See More</a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (productsForSlide.Count() < itemsPerSlide)
+                                        {
+                                            var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                            for (int i = 0; i < emptyColumns; i++)
+                                            {
+                                                <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">No Products Available</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>
+ *@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* @model Food.DTOs.ProductDTO
+<style>
+    .fashion_section {
+        padding: 50px 0;
+    }
+
+    .box {
+        border: 1px solid #eee;
+        padding: 20px;
+        margin-bottom: 30px;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+        .box:hover {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+    .img-box img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+    }
+
+    .detail-box h5 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .detail-box p {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 15px;
+    }
+
+    .options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .options h6 {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .options a {
+            color: #ff5722;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+</style>
+<!-- Fashion Section Start -->
+<style>
+    .head {
+        margin-top: 70px;
+    }
+</style>
+<div class="fashion_section">
+    <!-- Fashion Carousel -->
+    <div id="main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.FastFood != null && Model.FastFood.Any())
+            {
+                var itemsPerSlide = 3;
+                var totalSlides = (int)Math.Ceiling((double)Model.FastFood.Count() / itemsPerSlide);
+
+                for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                {
+                    var productsForSlide = Model.FastFood.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                        <div class="container">
+                            <h1 class="fashion_taital">Fashion</h1>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in productsForSlide)
+                                    {
+                                        <div class="col-lg-4 col-sm-4 mb-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.NAME</h4>
+                                                <p class="price_text">Start Price <span style="color: #262626;">$ @product.PRICE</span></p>
+                                                <div class="tshirt_img">
+                                                    <img src="@Url.Content(product.IMAGEURL)" alt="@product.NAME">
+                                                </div>
+                                                <div class="btn_main">
+                                                    <div class="buy_bt"><a href="#">Buy Now</a></div>
+                                                    <div class="seemore_bt"><a href="@Url.Action("Fashion","Product")">See More</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (productsForSlide.Count() < itemsPerSlide)
+                                    {
+                                        var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                        for (int i = 0; i < emptyColumns; i++)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">Fashion</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-right"></i>
+        </a>
+        <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-left"></i>
+        </a>
+    </div>
+
+    <!-- Electronic Carousel -->
+    <div id="electronic_main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.Electronics != null && Model.Electronics.Any())
+            {
+                var itemsPerSlide = 3;
+                var totalSlides = (int)Math.Ceiling((double)Model.Electronics.Count() / itemsPerSlide);
+
+                for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                {
+                    var productsForSlide = Model.Electronics.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                        <div class="container">
+                            <div class="head">
+                                <h1 class="fashion_taital">Electronic</h1>
+                            </div>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in productsForSlide)
+                                    {
+                                        <div class="col-lg-4 col-sm-4 mb-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.ProductName</h4>
+                                                <p class="price_text">Start Price <span style="color: #262626;">$ @product.Price</span></p>
+                                                <div class="tshirt_img">
+                                                    <img src="@Url.Content(product.ProductImagePath)" alt="@product.ProductName">
+                                                </div>
+                                                <div class="btn_main">
+                                                    <div class="buy_bt"><a href="#">Buy Now</a></div>
+                                                    <div class="seemore_bt"><a href="@Url.Action("Electronic","Product")">See More</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (productsForSlide.Count() < itemsPerSlide)
+                                    {
+                                        var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                        for (int i = 0; i < emptyColumns; i++)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">Electronic</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#electronic_main_slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-right"></i>
+        </a>
+        <a class="carousel-control-next" href="#electronic_main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-left"></i>
+        </a>
+    </div>
+
+    <!-- Jewellery Carousel -->
+    <div id="jewellery_main_slider" class="carousel slide mt-5" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (Model.Jewellery != null && Model.Jewellery.Any())
+            {
+                var itemsPerSlide = 3;
+                var totalSlides = (int)Math.Ceiling((double)Model.Jewellery.Count() / itemsPerSlide);
+
+                for (int slideIndex = 0; slideIndex < totalSlides; slideIndex++)
+                {
+                    var productsForSlide = Model.Jewellery.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide);
+                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                        <div class="container">
+                            <div class="head">
+                                <h1 class="fashion_taital">Jewellery</h1>
+                            </div>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in productsForSlide)
+                                    {
+                                        <div class="col-lg-4 col-sm-4 mb-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.ProductName</h4>
+                                                <p class="price_text">Start Price <span style="color: #262626;">$ @product.Price</span></p>
+                                                <div class="tshirt_img">
+                                                    <img src="@Url.Content(product.ProductImagePath)" alt="@product.ProductName">
+                                                </div>
+                                                <div class="btn_main">
+                                                    <div class="buy_bt"><a href="#">Buy Now</a></div>
+                                                    <div class="seemore_bt"><a href="@Url.Action("Jewellery","Product")">See More</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (productsForSlide.Count() < itemsPerSlide)
+                                    {
+                                        var emptyColumns = itemsPerSlide - productsForSlide.Count();
+                                        for (int i = 0; i < emptyColumns; i++)
+                                        {
+                                            <div class="col-lg-4 col-sm-4 mb-4"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="container">
+                        <h1 class="fashion_taital">Jewellery</h1>
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>No products available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <a class="carousel-control-prev" href="#jewellery_main_slider" role="button" data-slide="prev">
+                <i class="fa fa-angle-right"></i>
+        </a>
+        <a class="carousel-control-next" href="#jewellery_main_slider" role="button" data-slide="next">
+            <i class="fa fa-angle-left"></i>
+        </a>
+    
+</div>
+<!-- Fashion Section End --> *@

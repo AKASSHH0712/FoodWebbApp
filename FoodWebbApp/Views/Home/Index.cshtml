@@ -1,0 +1,152 @@
+﻿@model List<Food.DTOs.ProductDTO>
+@inject IHttpContextAccessor Accessor
+
+<style>
+    .fashion_section {
+        padding: 60px 0;
+        background-color: #f9f9f9;
+    }
+
+    .box {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+        transition: all 0.3s ease;
+        text-align: center;
+        background-color: #fff;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+        .box:hover {
+            transform: scale(1.02);
+        }
+
+    .img-box img {
+        border-radius: 10px;
+        width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+    }
+
+    .detail-box h5 {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .detail-box p {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 15px;
+    }
+
+    .options {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .options h6 {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .options .quantity-controls {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+    .quantity-controls input {
+        width: 60px;
+        height: 40px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-right: 10px;
+    }
+
+    .buy_bt {
+        background-color: #ff5722;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .buy_bt:hover {
+            background-color: #e64a19;
+        }
+
+    .options a {
+        color: #ff5722;
+        text-decoration: none;
+        font-size: 24px;
+        margin-top: 10px;
+    }
+
+        .options a:hover {
+            color: #e64a19;
+        }
+</style>
+
+<div class="fashion_section">
+    <div class="container">
+        <div class="row">
+            @{
+                if (Model != null && Model.Any()) // Check for null and empty list
+                {
+                    var groupedProducts = Model.GroupBy(p => p.CATEGORYID); // Group products by category
+
+                    foreach (var group in groupedProducts)
+                    {
+                        foreach (var product in group)
+                        {
+                            <div class="col-sm-6 col-lg-4 all pizza">
+                                <div class="box">
+                                    <div class="img-box">
+                                        <img src="@Url.Content(product.IMAGEURL)" alt="@product.NAME">
+                                    </div>
+                                    <div class="detail-box">
+                                        <h5>@product.NAME</h5>
+                                        <p>
+                                            Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam voluptatem repellendus sed eaque
+                                        </p>
+                                        <div class="options">
+                                            <h6>$ @product.PRICE</h6>
+                                            <form action="@Url.Action("IsProductInCart", "Addtocart")" method="post">
+                                                <input type="hidden" name="PRODUCTID" value="@product.PRODUCTID" />
+                                                <input type="hidden" name="CATEGORYID" value="@product.CATEGORYID" />
+                                                <input type="hidden" name="PRICE" value="@product.PRICE"></input>
+
+                                                <input type="hidden" name="USERID" value="@Accessor.HttpContext.Session.GetInt32("UserID")" />
+                                                <div class="quantity-controls">
+                                                    <input type="number" name="Quantity" value="1" min="1" class="quantity-input" />
+                                                </div>
+                                                <button type="submit" class="buy_bt">Add to Cart</button>
+                                            </form>
+                                            <a href="#">
+                                                <!-- Add your SVG icon here -->
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+                else
+                {
+                    <p>No products available.</p>
+                }
+            }
+        </div>
+    </div>
+</div>

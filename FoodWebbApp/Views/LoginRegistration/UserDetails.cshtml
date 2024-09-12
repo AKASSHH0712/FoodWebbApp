@@ -1,0 +1,182 @@
+﻿@model Food.DTOs.UserDto
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ececec; /* Light grey background */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container-fluid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .profile-header {
+            background-color: #6c757d; /* Muted dark grey */
+            color: white;
+            padding: 30px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-pic {
+            width: 130px;
+            height: 170px; /* Passport-size dimensions */
+            border-radius: 5px;
+            border: 2px solid #6c757d;
+            margin: 20px auto 0; /* Center the image */
+            background-color: #f0f0f0;
+            display: block;
+        }
+
+        .card-body {
+            padding: 40px;
+            background-color: #f7f7f7; /* Light background for the form */
+        }
+
+        .user-details dt {
+            font-weight: bold;
+            margin-top: 15px;
+            color: #333;
+        }
+
+        .user-details dd {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .password-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .eye-icon {
+            cursor: pointer;
+            margin-left: 10px;
+            width: 20px;
+            vertical-align: middle;
+        }
+
+        .monkey-gif {
+            width: 50px;
+            margin-left: 10px;
+        }
+
+        .action-links {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+            .action-links a {
+                margin: 0 10px;
+            }
+    </style>
+    <style>
+        /* Other styles remain the same */
+
+        .monkey-gif {
+            width: 50px; /* Set a fixed width */
+            height: 50px; /* Set a fixed height to maintain consistency */
+            margin-left: 10px;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById("passwordField");
+            var monkeyGif = document.getElementById("monkeyGif");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                monkeyGif.src = "@Url.Content("~/IMAGE/images.jpg")"; // Open eyes image
+            } else {
+                passwordField.type = "password";
+                monkeyGif.src = "@Url.Content("~/IMAGE/closedeyes.webp")"; // Closed eyes image
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="profile-header">
+                <h2>User Profile</h2>
+            </div>
+            <div class="text-center">
+                @if (!string.IsNullOrEmpty(Model.IMAGEURL))
+                {
+                    <img src="@Url.Content(Model.IMAGEURL)" alt="User Image" class="profile-pic" />
+                }
+                else
+                {
+                    <img src="@Url.Content("~/IMAGE/default.jpg")" alt="Default Image" class="profile-pic" />
+                }
+            </div>
+            <div class="card-body">
+                <dl class="row user-details">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.USERID)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.USERID)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.NAME)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.NAME)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.USERNAME)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.USERNAME)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.PASSWORD)</dt>
+                    <dd class="col-sm-8 password-container">
+                        <input id="passwordField" type="password" value="@Model.PASSWORD" readonly class="form-control-plaintext" />
+                        <img id="monkeyGif" src="@Url.Content("~/IMAGE/closedeyes.webp")" class="monkey-gif" alt="Monkey covering eyes" onclick="togglePassword()" />
+                    </dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.ADDRESS)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.ADDRESS)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.POSTCODE)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.POSTCODE)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.EMAIL)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.EMAIL)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MOBILE)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.MOBILE)</dd>
+                </dl>
+                <div class="action-links">
+                    @Html.ActionLink("Update", "Update", new { id = Model.USERID }, new { @class = "btn btn-dark" })
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

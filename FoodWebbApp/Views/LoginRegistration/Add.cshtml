@@ -1,0 +1,188 @@
+﻿@model Food.DTOs.UserDto
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            margin: 20px;
+        }
+
+            .form-container h4 {
+                margin-bottom: 30px;
+                font-size: 28px;
+                font-weight: 600;
+                color: #333;
+                text-align: center;
+            }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                color: #495057;
+                font-weight: 500;
+            }
+
+            .form-group input {
+                border-radius: 8px;
+                padding: 12px;
+                border: 1px solid #ced4da;
+                font-size: 16px;
+            }
+
+                .form-group input[type="submit"] {
+                    background-color: #007bff;
+                    border: none;
+                    color: #ffffff;
+                    padding: 14px 18px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease, transform 0.3s ease;
+                    font-size: 16px;
+                }
+
+                    .form-group input[type="submit"]:hover {
+                        background-color: #0056b3;
+                        transform: scale(1.02);
+                    }
+
+            .form-group .btn-back {
+                background-color: #6c757d;
+                color: #ffffff;
+                border-radius: 8px;
+                text-decoration: none;
+                text-align: center;
+                padding: 12px 24px;
+                font-size: 16px;
+                transition: background-color 0.3s ease, transform 0.3s ease;
+            }
+
+                .form-group .btn-back:hover {
+                    background-color: #5a6268;
+                    transform: scale(1.02);
+                }
+
+        .form-container .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-container .form-group input[type="file"] {
+            padding: 6px 12px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+            .button-group .btn {
+                width: 48%;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h4>User Registration</h4>
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+
+        <form asp-action="Add" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="form-group">
+                <label asp-for="NAME" class="control-label">Full Name</label>
+                <input asp-for="NAME" class="form-control" placeholder="Enter full name" />
+                <span asp-validation-for="NAME" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="USERNAME" class="control-label">Username</label>
+                <input asp-for="USERNAME" class="form-control" placeholder="Enter username" />
+                <span asp-validation-for="USERNAME" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PASSWORD" class="control-label">Password</label>
+                <input asp-for="PASSWORD" type="password" class="form-control" placeholder="Enter password" />
+                <span asp-validation-for="PASSWORD" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ADDRESS" class="control-label">Address</label>
+                <input asp-for="ADDRESS" class="form-control" placeholder="Enter address" />
+                <span asp-validation-for="ADDRESS" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="POSTCODE" class="control-label">Postcode</label>
+                <input asp-for="POSTCODE" class="form-control" placeholder="Enter postcode" />
+                <span asp-validation-for="POSTCODE" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EMAIL" class="control-label">Email</label>
+                <input asp-for="EMAIL" type="email" class="form-control" placeholder="Enter email address" />
+                <span asp-validation-for="EMAIL" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MOBILE" class="control-label">Mobile</label>
+                <input asp-for="MOBILE" class="form-control" placeholder="Enter mobile number" />
+                <span asp-validation-for="MOBILE" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="IMAGEURL" class="control-label">Profile Image</label>
+                <input type="file" name="IMAGE" class="form-control" />
+                <span asp-validation-for="IMAGEURL" class="text-danger"></span>
+            </div>
+
+            <div class="form-group button-group">
+                <input type="submit" value="Create Account" class="btn btn-primary" />
+                @*                 <a asp-action="Login" class="btn btn-secondary btn-back">Back to Login</a>*@
+            </div>
+        </form>
+
+        <div class="text-center mt-3">
+            <p>Already have an account? <a asp-action="Login" class="btn btn-link">Login Here</a></p>
+        </div>
+    </div>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</body>
+</html>
